@@ -17,7 +17,7 @@ Install these using your system's package manager. **Note:** `xclip` has been ad
 
 * **For Fedora (using `dnf`):**
     ```bash
-    sudo dnf install zsh vim tmux t xclip
+    sudo dnf install zsh vim tmux xclip
     ```
 
 * **For Debian, Ubuntu (using `apt`):**
@@ -28,7 +28,7 @@ Install these using your system's package manager. **Note:** `xclip` has been ad
 
 Install `starship` using the official installer script (requires `curl` to be installed):
 ```bash
-curl -sS [https://starship.rs/install.sh](https://starship.rs/install.sh) | sh
+curl -sS https://starship.rs/install.sh | sh
 ```
 
 **Required Packages Summary:**
@@ -46,9 +46,18 @@ This is used to manage tmux plugins. Clone the tpm repository manually to `~/.tm
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 
-**4. External Tools (NVM / PNPM):**
+**4. Clone the ZSH plugin repositories:**
+    Open your terminal and run the following commands to download the plugins into hidden directories in your home folder:
+
+    ```bash
+    git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh-autosuggestions
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh-syntax-highlighting
+    ```
+
+**5. External Tools (NVM / PNPM):**
 
 The `.zshrc` file includes configuration to load Node Version Manager (`nvm`) and set the path for `pnpm`. This setup assumes you have installed `nvm` and `pnpm` separately according to their official documentation (often using `curl` or `npm`). This repository/script does *not* install `nvm` or `pnpm` for you.
+
 
 
 ## Installation
@@ -76,4 +85,3 @@ The `.zshrc` file includes configuration to load Node Version Manager (`nvm`) an
     chsh -s $(which zsh)
     ```
     You might need to log out and log back in for this change to take effect.
-
