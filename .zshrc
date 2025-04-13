@@ -19,8 +19,8 @@ if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
   fi
 fi
 
-source ~/.zsh-autosuggestions/zsh-autosuggestions.zsh
-source ~/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.zsh/.zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.zsh/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -33,3 +33,6 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+#
+
+# eval "$(starship init zsh)"
