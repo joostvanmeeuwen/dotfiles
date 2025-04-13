@@ -48,8 +48,8 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 **4. Clone the ZSH plugin repositories:**
 
 ```bash
-git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh-syntax-highlighting
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/.zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/.zsh-syntax-highlighting
 ```
 
 **5. External Tools (NVM / PNPM):**
