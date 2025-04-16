@@ -72,7 +72,7 @@ set history=1000
 set showmatch
 
 " Enable the catppuccin_mocha color scheme
-"colorscheme catppuccin_mocha
+colorscheme catppuccin_mocha
 
 set termguicolors
 
