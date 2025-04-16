@@ -35,4 +35,4 @@ esac
 # pnpm end
 #
 
-# eval "$(starship init zsh)"
+export PATH=$PATH:$HOME/go/bin
