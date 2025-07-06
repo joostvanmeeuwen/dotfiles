@@ -63,4 +63,4 @@ esac
 # pnpm end
 #
 
-export PATH=$PATH:$HOME/go/bin
+export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
