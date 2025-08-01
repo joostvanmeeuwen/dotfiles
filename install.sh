@@ -46,6 +46,7 @@ link_dotfile ".vimrc" ".vimrc"
 link_dotfile ".config/starship.toml" ".config/starship.toml"
 link_dotfile ".aliases" ".aliases"
 link_dotfile ".vim" ".vim"
+link_dotfile "nvim" ".config/nvim" 
 
 echo "Linking process finished!"
 if [ -d "$BACKUP_DIR" ]; then
