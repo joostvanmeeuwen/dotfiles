@@ -12,17 +12,17 @@ Install these using your system's package manager. **Note:** `xclip` has been ad
 
 * **For openSUSE (using `zypper`):**
 ```bash
-sudo zypper install zsh vim neovim tmux xclip fzf bat
+sudo zypper install zsh vim neovim tmux xclip fzf bat tldr
 ```
 
 * **For Fedora (using `dnf`):**
 ```bash
-sudo dnf install zsh vim neovim tmux xclip fzf bat
+sudo dnf install zsh vim neovim tmux xclip fzf bat tldr
 ```
 
 * **For Debian, Ubuntu (using `apt`):**
 ```bash
-sudo apt update && sudo apt install zsh vim neovim tmux xclip fzf bat
+sudo apt update && sudo apt install zsh vim neovim tmux xclip fzf bat tldr
 ```
 
 **2. Starship:**
@@ -40,6 +40,8 @@ curl -sS https://starship.rs/install.sh | sh
 * `starship`: Cross-shell prompt (configuration in `.config/starship.toml`).
 * `xclip`: Used by tmux config for clipboard integration.
 * `fzf`: A general-purpose command-line fuzzy finder.
+* `bat`: Enhanced Cat Command
+* `tldr`: Simplified Man Pages
 
 **3. Tmux Plugin Manager (tpm):**
 
