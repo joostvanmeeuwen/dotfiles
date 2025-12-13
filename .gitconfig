@@ -1,0 +1,6 @@
+[user]
+	name = Joost van Meeuwen
+	email = joostvanmeeuwen@gmail.com
+[core]
+	editor = vim
+	autocrlf = input

@@ -42,6 +42,7 @@ echo "Starting dotfile linking process..."
 
 link_dotfile ".zshrc" ".zshrc"
 link_dotfile ".tmux.conf" ".tmux.conf"
+link_dotfile ".gitconfig" ".gitconfig "
 link_dotfile ".vimrc" ".vimrc"
 link_dotfile ".config/starship.toml" ".config/starship.toml"
 link_dotfile ".aliases" ".aliases"
