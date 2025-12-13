@@ -12,17 +12,17 @@ Install these using your system's package manager. **Note:** `xclip` has been ad
 
 * **For openSUSE (using `zypper`):**
 ```bash
-sudo zypper install zsh vim neovim tmux xclip fzf
+sudo zypper install zsh vim neovim tmux xclip fzf bat
 ```
 
 * **For Fedora (using `dnf`):**
 ```bash
-sudo dnf install zsh vim neovim tmux xclip fzf
+sudo dnf install zsh vim neovim tmux xclip fzf bat
 ```
 
 * **For Debian, Ubuntu (using `apt`):**
 ```bash
-sudo apt update && sudo apt install zsh vim neovim tmux xclip fzf
+sudo apt update && sudo apt install zsh vim neovim tmux xclip fzf bat
 ```
 
 **2. Starship:**
