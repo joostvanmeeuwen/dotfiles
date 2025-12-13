@@ -10,11 +10,6 @@ Before following the installation steps, ensure the following software is instal
 
 Install these using your system's package manager. **Note:** `xclip` has been added as it's used in the tmux config.
 
-* **For openSUSE (using `zypper`):**
-```bash
-sudo zypper install zsh vim neovim tmux xclip fzf bat tldr
-```
-
 * **For Fedora (using `dnf`):**
 ```bash
 sudo dnf install zsh vim neovim tmux xclip fzf bat tldr
