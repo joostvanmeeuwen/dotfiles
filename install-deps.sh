@@ -40,7 +40,7 @@ install_base_packages() {
     case $OS in
         fedora)
             sudo dnf install -y \
-                zsh vim neovim tmux xclip fzf bat tldr \
+                zsh vim neovim tmux xclip wl-clipboard fzf bat tldr \
                 git curl wget jq \
                 php php-cli php-json php-mbstring php-xml php-zip php-curl \
                 php-intl php-pdo php-mysqlnd php-pgsql php-opcache \
@@ -50,7 +50,7 @@ install_base_packages() {
         ubuntu|debian)
             sudo apt update
             sudo apt install -y \
-                zsh vim neovim tmux xclip fzf bat tldr \
+                zsh vim neovim tmux xclip wl-clipboard fzf bat tldr \
                 git curl wget jq \
                 php php-cli php-json php-mbstring php-xml php-zip php-curl \
                 php-intl php-pdo php-mysql php-pgsql php-opcache \

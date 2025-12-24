@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =3
+let g:netrw_dirhist_3='/home/joost/Projects/atelierkk-legacy/includes'
+let g:netrw_dirhist_2='/home/joost/Projects/atelierkk-legacy'
+let g:netrw_dirhist_1='/home/joost/Projects/atelierkk-legacy/includes'
