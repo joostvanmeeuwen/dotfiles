@@ -17,13 +17,14 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_IGNORE_SPACE
 setopt HIST_REDUCE_BLANKS
 
-bindkey "^[[1;5D" backward-word
-bindkey "^[[1;5C" forward-word
-bindkey "^[[1;3D" backward-word
-bindkey "^[[1;3C" forward-word
-bindkey '\e[3;5~' kill-word  # Ctrl + Delete
-bindkey '\e[3;3~' kill-word  # Alt + Delete
-bindkey '\e\x7f' backward-kill-word
+setopt AUTO_CD
+
+WORDCHARS='*?_[]~=&;!#$%^(){}<>'
+
+bindkey "^[[1;5D" backward-word   # Ctrl+Left
+bindkey "^[[1;5C" forward-word    # Ctrl+Right
+bindkey "^[[1;3D" backward-word   # Alt+Left
+bindkey "^[[1;3C" forward-word    # Alt+Right
 
 # Home
 if [[ -n "${terminfo[khome]}" ]]; then
