@@ -41,7 +41,7 @@ install_base_packages() {
         fedora)
             sudo dnf install -y \
                 zsh vim neovim tmux xclip wl-clipboard fzf bat tldr \
-                git curl wget jq \
+                git curl wget jq unzip ripgrep fd-find \
                 php php-cli php-json php-mbstring php-xml php-zip php-curl \
                 php-intl php-pdo php-mysqlnd php-pgsql php-opcache \
                 php-gd php-tokenizer php-bcmath \
@@ -51,7 +51,7 @@ install_base_packages() {
             sudo apt update
             sudo apt install -y \
                 zsh vim neovim tmux xclip wl-clipboard fzf bat \
-                git curl wget jq \
+                git curl wget jq unzip ripgrep fd-find \
                 php php-cli php-json php-mbstring php-xml php-zip php-curl \
                 php-intl php-pdo php-mysql php-pgsql php-opcache \
                 php-gd php-tokenizer php-bcmath \
@@ -228,6 +228,28 @@ install_tldr() {
     esac
 }
 
+install_jetbrains_nerd_font() {
+    local font_dir="$HOME/.local/share/fonts/JetBrainsMonoNerdFont"
+
+    if [ -d "$font_dir" ]; then
+        warn "JetBrains Mono Nerd Font already installed"
+        return 0
+    fi
+
+    info "Installing JetBrains Mono Nerd Font..."
+    mkdir -p "$font_dir"
+
+    local tmp_dir
+    tmp_dir=$(mktemp -d)
+    curl -L "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip" \
+        -o "$tmp_dir/JetBrainsMono.zip"
+    unzip -q "$tmp_dir/JetBrainsMono.zip" -d "$font_dir"
+    rm -rf "$tmp_dir"
+
+    info "Refreshing font cache..."
+    fc-cache -f "$font_dir"
+}
+
 # Main installation
 main() {
     info "Starting dependency installation..."
@@ -246,6 +268,7 @@ main() {
     install_tpm
     install_zsh_plugins
     install_tldr
+    install_jetbrains_nerd_font
 
     info "All dependencies installed successfully!"
     info ""
