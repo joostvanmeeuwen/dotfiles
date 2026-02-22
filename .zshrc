@@ -65,8 +65,8 @@ if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
   fi
 fi
 
-source ~/.zsh/.zsh-autosuggestions/zsh-autosuggestions.zsh
-source ~/.zsh/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+[ -f ~/.zsh/.zsh-autosuggestions/zsh-autosuggestions.zsh ] && source ~/.zsh/.zsh-autosuggestions/zsh-autosuggestions.zsh
+[ -f ~/.zsh/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source ~/.zsh/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -79,11 +79,10 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
-#
 
 source <(fzf --zsh)
 
 export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
 
 # opencode
-export PATH=/home/joost/.opencode/bin:$PATH
+export PATH="$HOME/.opencode/bin:$PATH"
