@@ -36,7 +36,7 @@ command_exists() {
 
 install_base_packages() {
     info "Installing base packages..."
-    
+
     case $OS in
         fedora)
             sudo dnf install -y \
@@ -69,7 +69,7 @@ install_starship() {
         warn "Starship already installed"
         return 0
     fi
-    
+
     info "Installing Starship..."
     curl -sS https://starship.rs/install.sh | sh -s -- -y
 }
@@ -79,7 +79,7 @@ install_composer() {
         warn "Composer already installed"
         return 0
     fi
-    
+
     info "Installing Composer..."
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     php composer-setup.php
@@ -92,7 +92,7 @@ install_symfony() {
         warn "Symfony CLI already installed"
         return 0
     fi
-    
+
     info "Installing Symfony CLI..."
     curl -sS https://get.symfony.com/cli/installer | bash
     sudo mv ~/.symfony5/bin/symfony /usr/local/bin/symfony
@@ -101,7 +101,7 @@ install_symfony() {
 get_latest_nvm_version() {
     local version
     version=$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | jq -r .tag_name)
-    
+
     if [ -z "$version" ] || [ "$version" = "null" ]; then
         error "Failed to fetch latest NVM version, using fallback"
         echo "v0.40.3"
@@ -116,17 +116,17 @@ install_nvm() {
         warn "NVM already installed"
         return 0
     fi
-    
+
     local nvm_version
     nvm_version=$(get_latest_nvm_version)
 
     info "Installing NVM ($nvm_version)..."
 
     curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/$nvm_version/install.sh" | bash
-    
+
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    
+
     info "Installing Node.js LTS..."
     nvm install --lts
 }
@@ -137,7 +137,7 @@ install_pnpm() {
         warn "pnpm already installed"
         return 0
     fi
-    
+
     info "Installing pnpm..."
     curl -fsSL https://get.pnpm.io/install.sh | sh -
 }
@@ -148,7 +148,7 @@ install_tpm() {
         warn "TPM already installed"
         return 0
     fi
-    
+
     info "Installing Tmux Plugin Manager..."
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 }
@@ -156,13 +156,13 @@ install_tpm() {
 # Install ZSH plugins
 install_zsh_plugins() {
     info "Installing ZSH plugins..."
-    
+
     if [ ! -d "$HOME/.zsh/.zsh-autosuggestions" ]; then
         git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/.zsh-autosuggestions
     else
         warn "zsh-autosuggestions already installed"
     fi
-    
+
     if [ ! -d "$HOME/.zsh/.zsh-syntax-highlighting" ]; then
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/.zsh-syntax-highlighting
     else
@@ -253,10 +253,10 @@ install_jetbrains_nerd_font() {
 # Main installation
 main() {
     info "Starting dependency installation..."
-    
+
     detect_os
     info "Detected OS: $OS"
-    
+
     # Install everything
     install_base_packages
     install_starship
@@ -271,13 +271,6 @@ main() {
     install_jetbrains_nerd_font
 
     info "All dependencies installed successfully!"
-    info ""
-    info "Next steps:"
-    info "  1. Run ./install.sh to symlink dotfiles"
-    info "  2. Start tmux and press Ctrl+a + I to install tmux plugins"
-    info "  3. Run 'chsh -s \$(which zsh)' to set zsh as default shell"
-    info "  4. Log out and back in for shell change to take effect"
-    info "  5. Log out and back in (or run 'newgrp docker') for docker group to take effect"
 }
 
 main "$@"

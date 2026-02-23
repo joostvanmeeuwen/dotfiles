@@ -20,6 +20,16 @@ error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+detect_os() {
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        OS=$ID
+    else
+        error "Cannot detect OS"
+        exit 1
+    fi
+}
+
 FLATPAK_APPS=(
     com.bitwarden.desktop 
     com.github.iwalton3.jellyfin-media-player
@@ -93,6 +103,40 @@ install_jetbrains_toolbox() {
     info "JetBrains Toolbox launched — it will finish installing itself in the background."
 }
 
+install_syncthing() {
+    if command -v syncthing &> /dev/null; then
+        warn "Syncthing already installed"
+        return 0
+    fi
+
+    info "Installing Syncthing..."
+    case $OS in
+        fedora)
+            sudo dnf install -y syncthing
+            ;;
+        ubuntu|debian)
+            sudo apt install -y syncthing
+            ;;
+        *)
+            error "Unsupported OS: $OS"
+            exit 1
+            ;;
+    esac
+
+    info "Enabling syncthing user service..."
+    systemctl --user enable --now syncthing.service
+}
+
+install_zed() {
+    if command -v zed &> /dev/null; then
+        warn "Zed already installed"
+        return 0
+    fi
+
+    info "Installing Zed..."
+    curl -f https://zed.dev/install.sh | sh
+}
+
 install_flatpak_apps() {
     if ! command -v flatpak &> /dev/null; then
         error "Flatpak is not installed. Install it first via your package manager."
@@ -118,11 +162,14 @@ install_flatpak_apps() {
 }
 
 main() {
+    detect_os
     info "Starting application installation..."
+    install_syncthing
     install_flatpak_apps
     install_claude_code
     install_gemini_cli
     install_jetbrains_toolbox
+    install_zed
     info "All applications installed successfully!"
 }
 
