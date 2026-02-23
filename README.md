@@ -1,85 +1,45 @@
 # Dotfiles
 
-This repository contains my personal configuration files (dotfiles) for a Linux environment. 
+Personal configuration files for a Linux environment (Fedora/Debian/Ubuntu).
 
-## Dependencies
+## Quick Start
 
-Before following the installation steps, ensure the following software is installed.
-
-**1. Core Applications & Tools:**
-
-Install these using your system's package manager. **Note:** `xclip` has been added as it's used in the tmux config.
-
-* **For Fedora (using `dnf`):**
-```bash
-sudo dnf install zsh vim neovim tmux xclip fzf bat tldr
-```
-
-* **For Debian, Ubuntu (using `apt`):**
-```bash
-sudo apt update && sudo apt install zsh vim neovim tmux xclip fzf bat tldr
-```
-
-**2. Starship:**
-
-Install `starship` using the official installer script (requires `curl` to be installed):
-```bash
-curl -sS https://starship.rs/install.sh | sh
-```
-
-**Required Packages Summary:**
-* `zsh`: The shell for which the configuration (`.zshrc`) is intended.
-* `vim`: Text editor (configuration in `.vimrc`).
-* `neovim`: Modern text editor (powered by LazyVim config).
-* `tmux`: Terminal multiplexer (configuration in `.tmux.conf`).
-* `starship`: Cross-shell prompt (configuration in `.config/starship.toml`).
-* `xclip`: Used by tmux config for clipboard integration.
-* `fzf`: A general-purpose command-line fuzzy finder.
-* `bat`: Enhanced Cat Command
-* `tldr`: Simplified Man Pages
-
-**3. Tmux Plugin Manager (tpm):**
-
-```bash
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-```
-
-**4. Clone the ZSH plugin repositories:**
-
-```bash
-git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/.zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/.zsh-syntax-highlighting
-```
-
-**5. External Tools (NVM / PNPM):**
-
-The `.zshrc` file includes configuration to load Node Version Manager (`nvm`) and set the path for `pnpm`. This setup assumes you have installed `nvm` and `pnpm` separately according to their official documentation (often using `curl` or `npm`). This repository/script does *not* install `nvm` or `pnpm` for you.
-
-## Installation
-
-**1. Clone this repository:**
 ```bash
 git clone git@github.com:joostvanmeeuwen/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
+
+./install-deps.sh              # zsh, neovim, tmux, php, go, docker, nvm, fonts, ...
+./install-apps.sh              # flatpaks, syncthing, claude, gemini, zed, jetbrains
+./install-gnome-extensions.sh  # GNOME extensions (requires active GNOME session)
+./install.sh                   # symlink dotfiles to $HOME
 ```
 
-**2. Run the Installation Script:**
-This script (which should be present in the repository) creates the necessary symbolic links for files like `.zshrc`, `.tmux.conf`, `.vimrc`, `.aliases`, etc. It will back up any existing files it finds at the target locations.
+## Scripts
 
-```bash
-chmod +x install.sh
-./install.sh
-```
+| Script | Purpose |
+|--------|---------|
+| `install-deps.sh` | System packages, starship, docker, nvm, pnpm, tmux plugins, zsh plugins, fonts |
+| `install-apps.sh` | Flatpak apps, Syncthing, Claude Code, Gemini CLI, Zed, JetBrains Toolbox |
+| `install-gnome-extensions.sh` | Installs and enables GNOME Shell extensions via `gext` |
+| `install.sh` | Creates symlinks from `$HOME` to this repo |
 
-**3. Install Tmux Plugins:**
-* Start `tmux`.
-* Press `prefix` + `I` (capital i). The default prefix is `Ctrl+a` according to your config. This command instructs `tpm` to install the plugins defined in `.tmux.conf`.
+Re-running any script is safe — each step checks if it's already done.
 
-**4. (Optional) Change Default Shell to Zsh:**
-Use `zsh` as your default login shell:
+## Dotfiles
 
-```bash
-chsh -s $(which zsh)
-```
+| File | Symlink | Purpose |
+|------|---------|---------|
+| `.zshrc` | `~/.zshrc` | Zsh config: starship, fzf, nvm, pnpm, tmux auto-attach |
+| `.aliases` | `~/.aliases` | Shell aliases |
+| `.tmux.conf` | `~/.tmux.conf` | Tmux: Catppuccin theme, custom keybinds |
+| `.vimrc` | `~/.vimrc` | Vim config |
+| `.vim/` | `~/.vim` | Vim colorschemes |
+| `.gitconfig` | `~/.gitconfig` | Git config |
+| `.config/starship.toml` | `~/.config/starship.toml` | Starship prompt |
+| `nvim/` | `~/.config/nvim` | LazyVim-based Neovim config |
 
-Log out and log back in for this change to take effect.
+## After Install
+
+- Start tmux and press `Ctrl+a + I` to install tmux plugins
+- Run `chsh -s $(which zsh)` to set zsh as default shell
+- Log out and back in for shell and docker group changes to take effect
