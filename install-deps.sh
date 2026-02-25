@@ -45,7 +45,8 @@ install_base_packages() {
                 php php-cli php-json php-mbstring php-xml php-zip php-curl \
                 php-intl php-pdo php-mysqlnd php-pgsql php-opcache \
                 php-gd php-tokenizer php-bcmath \
-                golang python3-pip
+                golang python3-pip \
+                zoxide git-delta
             ;;
         ubuntu|debian)
             sudo apt update
@@ -55,7 +56,8 @@ install_base_packages() {
                 php php-cli php-json php-mbstring php-xml php-zip php-curl \
                 php-intl php-pdo php-mysql php-pgsql php-opcache \
                 php-gd php-tokenizer php-bcmath \
-                golang-go python3-pip
+                golang-go python3-pip \
+                zoxide git-delta
             ;;
         *)
             error "Unsupported OS: $OS"
