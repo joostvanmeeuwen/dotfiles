@@ -84,7 +84,6 @@ esac
 
 source <(fzf --zsh)
 
-# zoxide (slimme cd)
 eval "$(zoxide init zsh)"
 
 export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
