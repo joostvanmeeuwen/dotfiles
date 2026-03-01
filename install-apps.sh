@@ -80,6 +80,9 @@ install_jetbrains_toolbox() {
   tmp_dir=$(mktemp -d)
   curl -L "$download_url" -o "$tmp_dir/toolbox.tar.gz"
 
+  local install_dir="$HOME/.local/share/JetBrains/Toolbox"
+  mkdir -p "$install_dir"
+
   info "Extracting JetBrains Toolbox..."
   tar -xzf "$tmp_dir/toolbox.tar.gz" -C "$tmp_dir"
 
@@ -91,26 +94,12 @@ install_jetbrains_toolbox() {
     exit 1
   fi
 
-  rm -rf /tmp/jetbrains-toolbox-install
-  mv "$toolbox_dir" /tmp/jetbrains-toolbox-install
+  mv "$toolbox_dir"/* "$install_dir/"
   rm -rf "$tmp_dir"
 
-  info "Launching JetBrains Toolbox (installs to ~/.local/share/JetBrains/)..."
-  /tmp/jetbrains-toolbox-install/jetbrains-toolbox --minimize &
-
-  info "Waiting for JetBrains Toolbox to finish installing..."
-  local count=0
-  while [ ! -d "$HOME/.local/share/JetBrains/Toolbox" ] && [ $count -lt 30 ]; do
-    sleep 1
-    count=$((count + 1))
-  done
-  rm -rf /tmp/jetbrains-toolbox-install
-
-  if [ ! -d "$HOME/.local/share/JetBrains/Toolbox" ]; then
-    warn "JetBrains Toolbox may not have fully installed (no GPU in VM?). Check ~/.local/share/JetBrains/Toolbox/"
-    return 0
-  fi
-  info "JetBrains Toolbox installed successfully."
+  info "Launching JetBrains Toolbox..."
+  "$install_dir/jetbrains-toolbox" --minimize &
+  info "JetBrains Toolbox installed to $install_dir"
 }
 
 install_syncthing() {
