@@ -69,11 +69,13 @@ install_jetbrains_toolbox() {
   tmp_dir=$(mktemp -d)
   curl -L "$download_url" -o "$tmp_dir/toolbox.tar.gz"
 
-  info "Extracting and launching JetBrains Toolbox (installs to ~/.local/share/JetBrains/)..."
+  info "Extracting JetBrains Toolbox..."
   tar -xzf "$tmp_dir/toolbox.tar.gz" -C "$tmp_dir"
-  "$tmp_dir"/jetbrains-toolbox-*/jetbrains-toolbox --minimize &
-
+  cp "$tmp_dir"/jetbrains-toolbox-*/jetbrains-toolbox /tmp/jetbrains-toolbox-install
   rm -rf "$tmp_dir"
+
+  info "Launching JetBrains Toolbox (installs to ~/.local/share/JetBrains/)..."
+  /tmp/jetbrains-toolbox-install --minimize &
   info "JetBrains Toolbox launched — it will finish installing itself in the background."
 }
 
