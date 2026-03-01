@@ -98,7 +98,8 @@ install_jetbrains_toolbox() {
   rm -rf "$tmp_dir"
 
   info "Launching JetBrains Toolbox..."
-  "$install_dir/jetbrains-toolbox" --minimize &
+  nohup "$install_dir/jetbrains-toolbox" --minimize > /dev/null 2>&1 &
+  disown
   info "JetBrains Toolbox installed to $install_dir"
 }
 
