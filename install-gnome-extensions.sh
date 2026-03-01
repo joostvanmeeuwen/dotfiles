@@ -22,6 +22,21 @@ check_gnome() {
     fi
 }
 
+install_gnome_tweaks() {
+    if command_exists gnome-tweaks; then
+        warn "gnome-tweaks already installed"
+        return 0
+    fi
+
+    info "Installing gnome-tweaks..."
+    detect_os
+    case $OS in
+        fedora)  sudo dnf install -y gnome-tweaks ;;
+        ubuntu|debian) sudo apt install -y gnome-tweaks ;;
+        *) warn "Unsupported OS for gnome-tweaks: $OS" ;;
+    esac
+}
+
 install_gext() {
     if command -v gext &> /dev/null; then
         warn "gnome-extensions-cli (gext) already installed"
@@ -70,6 +85,7 @@ enable_gnome_extensions() {
 main() {
     info "Starting GNOME extension installation..."
     check_gnome
+    install_gnome_tweaks
     install_gext
     install_gnome_extensions
     enable_gnome_extensions
