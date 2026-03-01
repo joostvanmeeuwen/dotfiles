@@ -60,7 +60,7 @@ install_gemini_cli() {
 }
 
 install_jetbrains_toolbox() {
-  if [ -f "$HOME/.local/share/JetBrains/Toolbox/bin/jetbrains-toolbox" ]; then
+  if [ -d "$HOME/.local/share/JetBrains/Toolbox" ]; then
     warn "JetBrains Toolbox already installed"
     return 0
   fi
@@ -82,12 +82,35 @@ install_jetbrains_toolbox() {
 
   info "Extracting JetBrains Toolbox..."
   tar -xzf "$tmp_dir/toolbox.tar.gz" -C "$tmp_dir"
-  cp "$tmp_dir"/jetbrains-toolbox-*/jetbrains-toolbox /tmp/jetbrains-toolbox-install
+
+  local toolbox_dir
+  toolbox_dir=$(find "$tmp_dir" -name "jetbrains-toolbox" -type f -executable | xargs dirname)
+  if [ -z "$toolbox_dir" ]; then
+    error "Could not find jetbrains-toolbox binary in extracted archive"
+    rm -rf "$tmp_dir"
+    exit 1
+  fi
+
+  rm -rf /tmp/jetbrains-toolbox-install
+  mv "$toolbox_dir" /tmp/jetbrains-toolbox-install
   rm -rf "$tmp_dir"
 
   info "Launching JetBrains Toolbox (installs to ~/.local/share/JetBrains/)..."
-  /tmp/jetbrains-toolbox-install --minimize &
-  info "JetBrains Toolbox launched — it will finish installing itself in the background."
+  /tmp/jetbrains-toolbox-install/jetbrains-toolbox --minimize &
+
+  info "Waiting for JetBrains Toolbox to finish installing..."
+  local count=0
+  while [ ! -d "$HOME/.local/share/JetBrains/Toolbox" ] && [ $count -lt 30 ]; do
+    sleep 1
+    count=$((count + 1))
+  done
+  rm -rf /tmp/jetbrains-toolbox-install
+
+  if [ ! -d "$HOME/.local/share/JetBrains/Toolbox" ]; then
+    warn "JetBrains Toolbox may not have fully installed (no GPU in VM?). Check ~/.local/share/JetBrains/Toolbox/"
+    return 0
+  fi
+  info "JetBrains Toolbox installed successfully."
 }
 
 install_syncthing() {
