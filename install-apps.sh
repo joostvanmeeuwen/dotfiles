@@ -30,6 +30,16 @@ install_claude_code() {
   curl -fsSL https://claude.ai/install.sh | bash
 }
 
+install_opencode() {
+  if command -v opencode &>/dev/null; then
+    warn "OpenCode already installed"
+    return 0
+  fi
+
+  info "Installing OpenCode..."
+  curl -fsSL https://opencode.ai/install | bash
+}
+
 install_gemini_cli() {
   if command -v gemini &>/dev/null; then
     warn "Gemini CLI already installed"
@@ -144,6 +154,7 @@ main() {
   install_syncthing
   install_flatpak_apps
   install_claude_code
+  install_opencode
   install_gemini_cli
   install_jetbrains_toolbox
   install_zed
