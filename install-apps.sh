@@ -16,6 +16,7 @@ FLATPAK_APPS=(
   org.inkscape.Inkscape
   org.mozilla.Thunderbird
   org.onlyoffice.desktopeditors
+  org.gnome.Extensions
   org.signal.Signal
 )
 
