@@ -29,7 +29,6 @@ install_gnome_tweaks() {
     fi
 
     info "Installing gnome-tweaks..."
-    detect_os
     case $OS in
         fedora)  sudo dnf install -y gnome-tweaks ;;
         ubuntu|debian) sudo apt install -y gnome-tweaks ;;
@@ -38,13 +37,13 @@ install_gnome_tweaks() {
 }
 
 install_gext() {
-    if command -v gext &> /dev/null; then
+    if command_exists gext; then
         warn "gnome-extensions-cli (gext) already installed"
         return 0
     fi
 
     info "Installing gnome-extensions-cli (gext) via pip3..."
-    if ! command -v pip3 &> /dev/null; then
+    if ! command_exists pip3; then
         error "pip3 not found. Install python3-pip via your package manager first."
         exit 1
     fi
@@ -52,7 +51,7 @@ install_gext() {
 
     export PATH="$HOME/.local/bin:$PATH"
 
-    if ! command -v gext &> /dev/null; then
+    if ! command_exists gext; then
         error "gext installation failed or ~/.local/bin is not in PATH."
         exit 1
     fi
@@ -85,6 +84,7 @@ enable_gnome_extensions() {
 main() {
     info "Starting GNOME extension installation..."
     check_gnome
+    detect_os
     install_gnome_tweaks
     install_gext
     install_gnome_extensions

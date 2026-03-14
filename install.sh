@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source "$(dirname "$(realpath "$0")")/lib/helpers.sh"
+
 DOTFILES_DIR="$HOME/.dotfiles"
 BACKUP_DIR="$HOME/.dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
 
@@ -11,34 +13,34 @@ link_dotfile() {
   target_dir=$(dirname "$target_link")
 
   if [ ! -e "$source_file" ]; then
-    echo " ERROR: Source file '$source_file' not found. Skipping."
+    error "Source file '$source_file' not found. Skipping."
     return 1
   fi
 
   if [ ! -d "$target_dir" ]; then
-    echo " INFO: Creating target directory '$target_dir'."
+    info "Creating target directory '$target_dir'."
     mkdir -p "$target_dir"
   fi
 
   if [ -e "$target_link" ] || [ -L "$target_link" ]; then
     if [ -L "$target_link" ] && [ "$(readlink "$target_link")" = "$source_file" ]; then
-      echo " OK: Link '$target_link' already exists and points correctly."
+      info "Link '$target_link' already exists and points correctly."
       return 0
     else
       if [ ! -d "$BACKUP_DIR" ]; then
-        echo " INFO: Creating backup directory '$BACKUP_DIR'."
+        info "Creating backup directory '$BACKUP_DIR'."
         mkdir -p "$BACKUP_DIR"
       fi
-      echo " WARN: '$target_link' already exists. Backing up to '$BACKUP_DIR/$(basename "$target_link")'."
+      warn "'$target_link' already exists. Backing up to '$BACKUP_DIR/$(basename "$target_link")'."
       mv -f "$target_link" "$BACKUP_DIR/"
     fi
   fi
 
-  echo " LINK: '$source_file' -> '$target_link'"
+  info "'$source_file' -> '$target_link'"
   ln -s "$source_file" "$target_link"
 }
 
-echo "Starting dotfile linking process..."
+info "Starting dotfile linking process..."
 
 link_dotfile ".zshrc" ".zshrc"
 link_dotfile ".tmux.conf" ".tmux.conf"
@@ -51,11 +53,11 @@ link_dotfile "nvim" ".config/nvim"
 link_dotfile ".config/systemd/user/gcr-ssh-agent.service" ".config/systemd/user/gcr-ssh-agent.service"
 link_dotfile ".config/systemd/user/gcr-ssh-agent.socket" ".config/systemd/user/gcr-ssh-agent.socket"
 
-echo "Linking process finished!"
+info "Linking process finished!"
 if [ -d "$BACKUP_DIR" ]; then
-  echo "Backups of overwritten files (if any) are in: $BACKUP_DIR"
+  info "Backups of overwritten files (if any) are in: $BACKUP_DIR"
 else
-  echo "No existing files needed backing up."
+  info "No existing files needed backing up."
 fi
 
 exit 0

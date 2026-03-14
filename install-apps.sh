@@ -21,7 +21,7 @@ FLATPAK_APPS=(
 )
 
 install_claude_code() {
-  if command -v claude &>/dev/null; then
+  if command_exists claude; then
     warn "Claude Code already installed"
     return 0
   fi
@@ -31,7 +31,7 @@ install_claude_code() {
 }
 
 install_opencode() {
-  if command -v opencode &>/dev/null; then
+  if command_exists opencode; then
     warn "OpenCode already installed"
     return 0
   fi
@@ -41,7 +41,7 @@ install_opencode() {
 }
 
 install_gemini_cli() {
-  if command -v gemini &>/dev/null; then
+  if command_exists gemini; then
     warn "Gemini CLI already installed"
     return 0
   fi
@@ -50,7 +50,7 @@ install_gemini_cli() {
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-  if ! command -v npm &>/dev/null; then
+  if ! command_exists npm; then
     error "npm not found. Run install-deps.sh first to install nvm/node."
     exit 1
   fi
@@ -104,7 +104,7 @@ install_jetbrains_toolbox() {
 }
 
 install_syncthing() {
-  if command -v syncthing &>/dev/null; then
+  if command_exists syncthing; then
     warn "Syncthing already installed"
     return 0
   fi
@@ -128,7 +128,7 @@ install_syncthing() {
 }
 
 install_zed() {
-  if command -v zed &>/dev/null; then
+  if command_exists zed; then
     warn "Zed already installed"
     return 0
   fi
@@ -138,7 +138,7 @@ install_zed() {
 }
 
 install_flatpak_apps() {
-  if ! command -v flatpak &>/dev/null; then
+  if ! command_exists flatpak; then
     error "Flatpak is not installed. Install it first via your package manager."
     exit 1
   fi
