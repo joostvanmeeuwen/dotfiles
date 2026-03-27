@@ -52,6 +52,7 @@ link_dotfile ".vim" ".vim"
 link_dotfile "nvim" ".config/nvim"
 link_dotfile ".config/systemd/user/gcr-ssh-agent.service" ".config/systemd/user/gcr-ssh-agent.service"
 link_dotfile ".config/systemd/user/gcr-ssh-agent.socket" ".config/systemd/user/gcr-ssh-agent.socket"
+link_dotfile ".config/ghostty/config" ".config/ghostty/config"
 
 info "Linking process finished!"
 if [ -d "$BACKUP_DIR" ]; then

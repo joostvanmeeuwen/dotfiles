@@ -18,7 +18,7 @@ cd ~/.dotfiles
 
 | Script | Purpose |
 |--------|---------|
-| `install-deps.sh` | System packages, starship, docker, nvm, pnpm, tmux plugins, zsh plugins, fonts |
+| `install-deps.sh` | System packages, starship, docker, nvm, pnpm, ghostty, tmux plugins, zsh plugins, fonts |
 | `install-apps.sh` | Flatpak apps, Syncthing, Claude Code, Gemini CLI, Zed, JetBrains Toolbox |
 | `install-gnome-extensions.sh` | Installs and enables GNOME Shell extensions via `gext` |
 | `install.sh` | Creates symlinks from `$HOME` to this repo |
@@ -37,6 +37,7 @@ Re-running any script is safe — each step checks if it's already done.
 | `.gitconfig` | `~/.gitconfig` | Git config |
 | `.config/starship.toml` | `~/.config/starship.toml` | Starship prompt |
 | `nvim/` | `~/.config/nvim` | LazyVim-based Neovim config |
+| `.config/ghostty/config` | `~/.config/ghostty/config` | Ghostty terminal config |
 
 ## After Install
 
