@@ -1,0 +1,8 @@
+theme = "Catppuccin Mocha"
+
+font-family = "JetBrainsMono Nerd Font"
+font-size = 13
+
+window-decoration = false
+
+macos-titlebar-style = transparent
