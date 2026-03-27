@@ -38,6 +38,9 @@ Re-running any script is safe — each step checks if it's already done.
 | `.config/starship.toml` | `~/.config/starship.toml` | Starship prompt |
 | `nvim/` | `~/.config/nvim` | LazyVim-based Neovim config |
 | `.config/ghostty/config` | `~/.config/ghostty/config` | Ghostty terminal config |
+| `.config/systemd/user/gcr-ssh-agent.service` | `~/.config/systemd/user/gcr-ssh-agent.service` | Empty override to disable gcr-ssh-agent service (replaced by Bitwarden SSH) |
+| `.config/systemd/user/gcr-ssh-agent.socket` | `~/.config/systemd/user/gcr-ssh-agent.socket` | Empty override to disable gcr-ssh-agent socket |
+| `.config/environment.d/bitwarden-ssh.conf` | `~/.config/environment.d/bitwarden-ssh.conf` | Sets SSH_AUTH_SOCK to Bitwarden SSH agent socket |
 
 ## After Install
 
