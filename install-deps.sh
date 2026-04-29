@@ -54,7 +54,14 @@ install_starship() {
     fi
 
     info "Installing Starship..."
-    curl -sS https://starship.rs/install.sh | sh -s -- -y
+    case $OS in
+        macos)
+            brew install starship
+            ;;
+        *)
+            curl -sS https://starship.rs/install.sh | sh -s -- -y
+            ;;
+    esac
 }
 
 install_composer() {
@@ -67,7 +74,17 @@ install_composer() {
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     php composer-setup.php
     php -r "unlink('composer-setup.php');"
-    sudo mv composer.phar /usr/local/bin/composer
+
+    case $OS in
+        macos)
+            mkdir -p "$HOME/.local/bin"
+            mv composer.phar "$HOME/.local/bin/composer"
+            chmod +x "$HOME/.local/bin/composer"
+            ;;
+        *)
+            sudo mv composer.phar /usr/local/bin/composer
+            ;;
+    esac
 }
 
 install_symfony() {
