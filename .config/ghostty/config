@@ -3,4 +3,6 @@ theme = "Catppuccin Mocha"
 font-family = "JetBrainsMono Nerd Font"
 font-size = 13
 
- gtk-titlebar = false
+gtk-titlebar = false
+
+macos-option-as-alt = true
