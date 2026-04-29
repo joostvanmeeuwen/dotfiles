@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source "$(dirname "$(realpath "$0")")/lib/helpers.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/helpers.sh"
 
 DOTFILES_DIR="$HOME/.dotfiles"
 BACKUP_DIR="$HOME/.dotfiles_backup_$(date +%Y%m%d_%H%M%S)"

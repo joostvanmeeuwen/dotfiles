@@ -2,7 +2,7 @@
 
 set -e
 
-source "$(dirname "$(realpath "$0")")/lib/helpers.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/helpers.sh"
 
 FLATPAK_APPS=(
   com.bitwarden.desktop

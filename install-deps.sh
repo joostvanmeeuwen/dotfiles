@@ -2,7 +2,7 @@
 
 set -e
 
-source "$(dirname "$(realpath "$0")")/lib/helpers.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/helpers.sh"
 
 install_base_packages() {
     info "Installing base packages..."
@@ -12,6 +12,11 @@ install_base_packages() {
             if ! command_exists brew; then
                 info "Installing Homebrew..."
                 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+                if [[ -f /opt/homebrew/bin/brew ]]; then
+                    eval "$(/opt/homebrew/bin/brew shellenv)"
+                elif [[ -f /usr/local/bin/brew ]]; then
+                    eval "$(/usr/local/bin/brew shellenv)"
+                fi
             fi
             brew install \
                 neovim tmux fzf bat ripgrep fd zoxide git-delta \
@@ -95,7 +100,16 @@ install_symfony() {
 
     info "Installing Symfony CLI..."
     curl -sS https://get.symfony.com/cli/installer | bash
-    sudo mv ~/.symfony5/bin/symfony /usr/local/bin/symfony
+
+    case $OS in
+        macos)
+            mkdir -p "$HOME/.local/bin"
+            mv ~/.symfony5/bin/symfony "$HOME/.local/bin/symfony"
+            ;;
+        *)
+            sudo mv ~/.symfony5/bin/symfony /usr/local/bin/symfony
+            ;;
+    esac
 }
 
 get_latest_nvm_version() {
