@@ -40,6 +40,7 @@ link_dotfile() {
   ln -s "$source_file" "$target_link"
 }
 
+detect_os
 info "Starting dotfile linking process..."
 
 link_dotfile ".zshrc" ".zshrc"
@@ -50,9 +51,11 @@ link_dotfile ".config/starship.toml" ".config/starship.toml"
 link_dotfile ".aliases" ".aliases"
 link_dotfile ".vim" ".vim"
 link_dotfile "nvim" ".config/nvim"
-link_dotfile ".config/systemd/user/gcr-ssh-agent.service" ".config/systemd/user/gcr-ssh-agent.service"
-link_dotfile ".config/systemd/user/gcr-ssh-agent.socket" ".config/systemd/user/gcr-ssh-agent.socket"
-link_dotfile ".config/environment.d/bitwarden-ssh.conf" ".config/environment.d/bitwarden-ssh.conf"
+if [[ "$OS" != "macos" ]]; then
+  link_dotfile ".config/systemd/user/gcr-ssh-agent.service" ".config/systemd/user/gcr-ssh-agent.service"
+  link_dotfile ".config/systemd/user/gcr-ssh-agent.socket" ".config/systemd/user/gcr-ssh-agent.socket"
+  link_dotfile ".config/environment.d/bitwarden-ssh.conf" ".config/environment.d/bitwarden-ssh.conf"
+fi
 link_dotfile ".config/ghostty/config" ".config/ghostty/config"
 
 info "Linking process finished!"

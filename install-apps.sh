@@ -20,6 +20,21 @@ FLATPAK_APPS=(
   org.signal.Signal
 )
 
+MACOS_CASK_APPS=(
+  bitwarden
+  jellyfin-media-player
+  nextcloud
+  whatsapp
+  spotify
+  ultimaker-cura
+  obsidian
+  gimp
+  inkscape
+  thunderbird
+  onlyoffice
+  signal
+)
+
 install_claude_code() {
   if command_exists claude; then
     warn "Claude Code already installed"
@@ -60,6 +75,16 @@ install_gemini_cli() {
 }
 
 install_jetbrains_toolbox() {
+  if [[ "$OS" == "macos" ]]; then
+    if brew list --cask jetbrains-toolbox &>/dev/null; then
+      warn "JetBrains Toolbox already installed"
+      return 0
+    fi
+    info "Installing JetBrains Toolbox..."
+    brew install --cask jetbrains-toolbox
+    return 0
+  fi
+
   if [ -d "$HOME/.local/share/JetBrains/Toolbox" ]; then
     warn "JetBrains Toolbox already installed"
     return 0
@@ -111,20 +136,23 @@ install_syncthing() {
 
   info "Installing Syncthing..."
   case $OS in
+  macos)
+    brew install syncthing
+    brew services start syncthing
+    ;;
   fedora)
     sudo dnf install -y syncthing
+    systemctl --user enable --now syncthing.service
     ;;
   ubuntu | debian)
     sudo apt install -y syncthing
+    systemctl --user enable --now syncthing.service
     ;;
   *)
     error "Unsupported OS: $OS"
     exit 1
     ;;
   esac
-
-  info "Enabling syncthing user service..."
-  systemctl --user enable --now syncthing.service
 }
 
 install_zed() {
@@ -135,6 +163,18 @@ install_zed() {
 
   info "Installing Zed..."
   curl -f https://zed.dev/install.sh | sh
+}
+
+install_brew_cask_apps() {
+  info "Installing macOS apps via Homebrew Cask..."
+  for cask in "${MACOS_CASK_APPS[@]}"; do
+    if brew list --cask "$cask" &>/dev/null; then
+      warn "$cask already installed"
+    else
+      info "Installing $cask..."
+      brew install --cask "$cask"
+    fi
+  done
 }
 
 install_flatpak_apps() {
@@ -165,7 +205,11 @@ main() {
   detect_os
   info "Starting application installation..."
   install_syncthing
-  install_flatpak_apps
+  if [[ "$OS" == "macos" ]]; then
+    install_brew_cask_apps
+  else
+    install_flatpak_apps
+  fi
   install_claude_code
   install_opencode
   install_gemini_cli

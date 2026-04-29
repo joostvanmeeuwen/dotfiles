@@ -8,9 +8,20 @@ install_base_packages() {
     info "Installing base packages..."
 
     case $OS in
+        macos)
+            if ! command_exists brew; then
+                info "Installing Homebrew..."
+                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            fi
+            brew install \
+                neovim tmux fzf bat ripgrep fd zoxide git-delta \
+                go python3 jq wget coreutils
+            brew tap shivammathur/php
+            brew install shivammathur/php/php@8.3
+            ;;
         fedora)
             sudo dnf install -y \
-                zsh vim neovim tmux xclip wl-clipboard fzf bat tldr \
+                zsh vim neovim tmux wl-clipboard fzf bat tldr \
                 git curl wget jq unzip ripgrep fd-find \
                 php php-cli php-json php-mbstring php-xml php-zip php-curl \
                 php-intl php-pdo php-mysqlnd php-pgsql php-opcache \
@@ -21,7 +32,7 @@ install_base_packages() {
         ubuntu|debian)
             sudo apt update
             sudo apt install -y \
-                zsh vim neovim tmux xclip wl-clipboard fzf bat \
+                zsh vim neovim tmux wl-clipboard fzf bat \
                 git curl wget jq unzip ripgrep fd-find \
                 php php-cli php-json php-mbstring php-xml php-zip php-curl \
                 php-intl php-pdo php-mysql php-pgsql php-opcache \
@@ -147,25 +158,34 @@ install_docker() {
         warn "Docker already installed"
     else
         info "Installing Docker..."
-        curl -fsSL https://get.docker.com -o get-docker.sh
-        sh get-docker.sh
-        rm get-docker.sh
+        case $OS in
+            macos)
+                brew install --cask orbstack
+                ;;
+            *)
+                curl -fsSL https://get.docker.com -o get-docker.sh
+                sh get-docker.sh
+                rm get-docker.sh
+                ;;
+        esac
     fi
 
-    # Add user to docker group
-    if groups $USER | grep -q '\bdocker\b'; then
-        warn "User $USER already in docker group"
-    else
-        info "Adding $USER to docker group..."
-        sudo usermod -aG docker $USER
-        warn "You need to log out and back in for docker group membership to take effect"
-        warn "Or run: newgrp docker"
-    fi
+    if [[ "$OS" != "macos" ]]; then
+        # Add user to docker group
+        if groups $USER | grep -q '\bdocker\b'; then
+            warn "User $USER already in docker group"
+        else
+            info "Adding $USER to docker group..."
+            sudo usermod -aG docker $USER
+            warn "You need to log out and back in for docker group membership to take effect"
+            warn "Or run: newgrp docker"
+        fi
 
-    # Start and enable docker service
-    info "Enabling and starting Docker service..."
-    sudo systemctl enable docker
-    sudo systemctl start docker
+        # Start and enable docker service
+        info "Enabling and starting Docker service..."
+        sudo systemctl enable docker
+        sudo systemctl start docker
+    fi
 }
 
 install_tldr() {
@@ -175,6 +195,11 @@ install_tldr() {
     fi
 
     case $OS in
+        macos)
+            info "Installing tealdeer (tldr client)..."
+            brew install tealdeer
+            tldr --update
+            ;;
         fedora)
             # Already installed via dnf
             return 0
@@ -209,6 +234,9 @@ install_ghostty() {
     info "Installing Ghostty..."
 
     case $OS in
+        macos)
+            brew install --cask ghostty
+            ;;
         fedora)
             sudo dnf copr enable scottames/ghostty -y
             sudo dnf install -y ghostty
@@ -225,6 +253,16 @@ install_ghostty() {
 }
 
 install_jetbrains_nerd_font() {
+    if [[ "$OS" == "macos" ]]; then
+        if brew list --cask font-jetbrains-mono-nerd-font &>/dev/null; then
+            warn "JetBrains Mono Nerd Font already installed"
+            return 0
+        fi
+        info "Installing JetBrains Mono Nerd Font..."
+        brew install --cask font-jetbrains-mono-nerd-font
+        return 0
+    fi
+
     local font_dir="$HOME/.local/share/fonts/JetBrainsMonoNerdFont"
 
     if [ -d "$font_dir" ]; then

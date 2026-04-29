@@ -19,7 +19,9 @@ error() {
 }
 
 detect_os() {
-    if [ -f /etc/os-release ]; then
+    if [[ "$(uname)" == "Darwin" ]]; then
+        OS="macos"
+    elif [ -f /etc/os-release ]; then
         . /etc/os-release
         OS=$ID
     else

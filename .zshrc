@@ -91,7 +91,11 @@ export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
 # opencode
 export PATH="$HOME/.opencode/bin:$PATH"
 
-BITWARDEN_SSH_SOCK=~/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock
+if [[ "$(uname)" == "Darwin" ]]; then
+    BITWARDEN_SSH_SOCK="$HOME/Library/Application Support/Bitwarden/bitwarden-ssh-agent.sock"
+else
+    BITWARDEN_SSH_SOCK="$HOME/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock"
+fi
 if [ -S "$BITWARDEN_SSH_SOCK" ]; then
-    export SSH_AUTH_SOCK=$BITWARDEN_SSH_SOCK
+    export SSH_AUTH_SOCK="$BITWARDEN_SSH_SOCK"
 fi
