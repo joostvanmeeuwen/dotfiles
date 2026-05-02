@@ -14,14 +14,73 @@ create_tools_dir() {
 install_dnf_packages() {
     info "Installing penetration testing packages via dnf..."
     sudo dnf install -y \
-        nmap masscan whois bind-utils net-tools netdiscover \
-        nikto sqlmap gobuster dirb \
-        john hashcat crunch hydra \
+        nmap masscan whois bind-utils net-tools \
+        gobuster hydra \
+        john hashcat \
         socat nmap-ncat tcpdump wireshark-cli \
-        smbclient openvpn enum4linux \
+        smbclient openvpn \
         binwalk foremost strace ltrace steghide perl-Image-ExifTool \
         gdb radare2 \
-        python3-pip ruby ruby-devel gcc make openssl
+        python3-pip ruby ruby-devel gcc make openssl \
+        libpcap-devel autoconf automake libtool
+}
+
+install_nikto() {
+    if command_exists nikto; then
+        warn "nikto already installed"
+        return 0
+    fi
+
+    info "Installing nikto (web server scanner)..."
+    git clone --depth 1 https://github.com/sullo/nikto "$HOME/tools/nikto"
+    sudo ln -sf "$HOME/tools/nikto/program/nikto.pl" /usr/local/bin/nikto
+    sudo chmod +x "$HOME/tools/nikto/program/nikto.pl"
+}
+
+install_netdiscover() {
+    if command_exists netdiscover; then
+        warn "netdiscover already installed"
+        return 0
+    fi
+
+    info "Installing netdiscover (ARP network scanner)..."
+    local tmp_dir
+    tmp_dir=$(mktemp -d)
+    git clone --depth 1 https://github.com/netdiscover-scanner/netdiscover "$tmp_dir/netdiscover"
+    (cd "$tmp_dir/netdiscover" && autoreconf -i && ./configure && make && sudo make install)
+    rm -rf "$tmp_dir"
+}
+
+install_dirb() {
+    if command_exists dirb; then
+        warn "dirb already installed"
+        return 0
+    fi
+
+    info "Installing dirb (web content scanner)..."
+    local tmp_dir
+    tmp_dir=$(mktemp -d)
+    curl -fsSL "https://sourceforge.net/projects/dirb/files/dirb/2.22/dirb222.tar.gz/download" \
+        -o "$tmp_dir/dirb.tar.gz"
+    tar xzf "$tmp_dir/dirb.tar.gz" -C "$tmp_dir"
+    (cd "$tmp_dir/dirb222" && ./configure && make && sudo make install)
+    rm -rf "$tmp_dir"
+}
+
+install_crunch() {
+    if command_exists crunch; then
+        warn "crunch already installed"
+        return 0
+    fi
+
+    info "Installing crunch (wordlist generator)..."
+    local tmp_dir
+    tmp_dir=$(mktemp -d)
+    curl -fsSL "https://sourceforge.net/projects/crunch-wordlist/files/crunch-wordlist/crunch-3.6.tgz/download" \
+        -o "$tmp_dir/crunch.tgz"
+    tar xzf "$tmp_dir/crunch.tgz" -C "$tmp_dir"
+    (cd "$tmp_dir/crunch-3.6" && make && sudo make install)
+    rm -rf "$tmp_dir"
 }
 
 install_ffuf() {
@@ -78,13 +137,13 @@ install_feroxbuster() {
 }
 
 install_python_tools() {
-    if command_exists pwn; then
-        warn "pwntools already installed"
+    if command_exists pwn && command_exists sqlmap && command_exists enum4linux-ng; then
+        warn "Python pen testing tools already installed"
         return 0
     fi
 
-    info "Installing Python pen testing tools (pwntools, impacket, ROPgadget)..."
-    pip3 install --user pwntools impacket ROPgadget
+    info "Installing Python pen testing tools (pwntools, impacket, ROPgadget, sqlmap, enum4linux-ng)..."
+    pip3 install --user pwntools impacket ROPgadget sqlmap enum4linux-ng
 }
 
 install_ruby_tools() {
@@ -232,6 +291,10 @@ main() {
 
     create_tools_dir
     install_dnf_packages
+    install_nikto
+    install_netdiscover
+    install_dirb
+    install_crunch
     install_ffuf
     install_feroxbuster
     install_python_tools
