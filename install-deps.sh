@@ -18,11 +18,10 @@ install_base_packages() {
                     eval "$(/usr/local/bin/brew shellenv)"
                 fi
             fi
-            brew install \
-                neovim tmux fzf bat ripgrep fd zoxide git-delta \
-                go python3 jq wget coreutils
-            brew tap shivammathur/php
-            brew install shivammathur/php/php@8.3
+            local script_dir
+            script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+            info "Installing packages via Brewfile..."
+            brew bundle install --file="$script_dir/Brewfile"
             ;;
         fedora)
             sudo dnf install -y \

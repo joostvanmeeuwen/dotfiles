@@ -20,21 +20,6 @@ FLATPAK_APPS=(
   org.signal.Signal
 )
 
-MACOS_CASK_APPS=(
-  bitwarden
-  jellyfin-media-player
-  nextcloud
-  whatsapp
-  spotify
-  ultimaker-cura
-  obsidian
-  gimp
-  inkscape
-  thunderbird
-  onlyoffice
-  signal
-)
-
 install_claude_code() {
   if command_exists claude; then
     warn "Claude Code already installed"
@@ -76,12 +61,6 @@ install_gemini_cli() {
 
 install_jetbrains_toolbox() {
   if [[ "$OS" == "macos" ]]; then
-    if brew list --cask jetbrains-toolbox &>/dev/null; then
-      warn "JetBrains Toolbox already installed"
-      return 0
-    fi
-    info "Installing JetBrains Toolbox..."
-    brew install --cask jetbrains-toolbox
     return 0
   fi
 
@@ -129,6 +108,10 @@ install_jetbrains_toolbox() {
 }
 
 install_syncthing() {
+  if [[ "$OS" == "macos" ]]; then
+    return 0
+  fi
+
   if command_exists syncthing; then
     warn "Syncthing already installed"
     return 0
@@ -136,10 +119,6 @@ install_syncthing() {
 
   info "Installing Syncthing..."
   case $OS in
-  macos)
-    brew install syncthing
-    brew services start syncthing
-    ;;
   fedora)
     sudo dnf install -y syncthing
     systemctl --user enable --now syncthing.service
@@ -165,16 +144,11 @@ install_zed() {
   curl -f https://zed.dev/install.sh | sh
 }
 
-install_brew_cask_apps() {
-  info "Installing macOS apps via Homebrew Cask..."
-  for cask in "${MACOS_CASK_APPS[@]}"; do
-    if brew list --cask "$cask" &>/dev/null; then
-      warn "$cask already installed"
-    else
-      info "Installing $cask..."
-      brew install --cask "$cask"
-    fi
-  done
+install_brew_bundle() {
+  local script_dir
+  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  info "Installing macOS apps via Brewfile..."
+  brew bundle install --file="$script_dir/Brewfile"
 }
 
 install_flatpak_apps() {
@@ -204,10 +178,10 @@ install_flatpak_apps() {
 main() {
   detect_os
   info "Starting application installation..."
-  install_syncthing
   if [[ "$OS" == "macos" ]]; then
-    install_brew_cask_apps
+    install_brew_bundle
   else
+    install_syncthing
     install_flatpak_apps
   fi
   install_claude_code
