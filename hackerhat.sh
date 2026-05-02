@@ -22,7 +22,7 @@ install_dnf_packages() {
         binwalk foremost strace ltrace steghide perl-Image-ExifTool \
         gdb radare2 \
         python3-pip ruby ruby-devel gcc make openssl \
-        libpcap-devel autoconf automake libtool
+        libpcap-devel autoconf automake libtool cmake
 }
 
 install_nikto() {
@@ -32,6 +32,7 @@ install_nikto() {
     fi
 
     info "Installing nikto (web server scanner)..."
+    sudo dnf install -y perl-FindBin perl-JSON perl-Time-Piece perl-XML-Writer perl-Net-hostent
     git clone --depth 1 https://github.com/sullo/nikto "$HOME/tools/nikto"
     sudo ln -sf "$HOME/tools/nikto/program/nikto.pl" /usr/local/bin/nikto
     sudo chmod +x "$HOME/tools/nikto/program/nikto.pl"
@@ -51,21 +52,6 @@ install_netdiscover() {
     rm -rf "$tmp_dir"
 }
 
-install_dirb() {
-    if command_exists dirb; then
-        warn "dirb already installed"
-        return 0
-    fi
-
-    info "Installing dirb (web content scanner)..."
-    local tmp_dir
-    tmp_dir=$(mktemp -d)
-    curl -fsSL "https://sourceforge.net/projects/dirb/files/dirb/2.22/dirb222.tar.gz/download" \
-        -o "$tmp_dir/dirb.tar.gz"
-    tar xzf "$tmp_dir/dirb.tar.gz" -C "$tmp_dir"
-    (cd "$tmp_dir/dirb222" && ./configure && make && sudo make install)
-    rm -rf "$tmp_dir"
-}
 
 install_crunch() {
     if command_exists crunch; then
@@ -79,6 +65,7 @@ install_crunch() {
     curl -fsSL "https://sourceforge.net/projects/crunch-wordlist/files/crunch-wordlist/crunch-3.6.tgz/download" \
         -o "$tmp_dir/crunch.tgz"
     tar xzf "$tmp_dir/crunch.tgz" -C "$tmp_dir"
+    chmod -R u+rwx "$tmp_dir/crunch-3.6"
     (cd "$tmp_dir/crunch-3.6" && make && sudo make install)
     rm -rf "$tmp_dir"
 }
@@ -137,13 +124,13 @@ install_feroxbuster() {
 }
 
 install_python_tools() {
-    if command_exists pwn && command_exists sqlmap && command_exists enum4linux-ng; then
+    if command_exists pwn && command_exists sqlmap; then
         warn "Python pen testing tools already installed"
         return 0
     fi
 
-    info "Installing Python pen testing tools (pwntools, impacket, ROPgadget, sqlmap, enum4linux-ng)..."
-    pip3 install --user pwntools impacket ROPgadget sqlmap enum4linux-ng
+    info "Installing Python pen testing tools (pwntools, impacket, ROPgadget, sqlmap)..."
+    pip3 install --user pwntools impacket ROPgadget sqlmap
 }
 
 install_ruby_tools() {
@@ -164,7 +151,7 @@ install_pwndbg() {
 
     info "Installing pwndbg (GDB enhancement for binary exploitation)..."
     git clone https://github.com/pwndbg/pwndbg "$HOME/.pwndbg"
-    "$HOME/.pwndbg/setup.sh"
+    (cd "$HOME/.pwndbg" && ./setup.sh)
 }
 
 install_metasploit() {
@@ -293,7 +280,6 @@ main() {
     install_dnf_packages
     install_nikto
     install_netdiscover
-    install_dirb
     install_crunch
     install_ffuf
     install_feroxbuster
