@@ -58,13 +58,9 @@ if [ -f ~/.aliases ]; then
 fi
 
 if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-  tmux list-sessions > /dev/null 2>&1
-
-  if [ $? -eq 0 ]; then
-    tmux attach || tmux new-session
-  else
-    tmux new-session
-  fi
+    if [[ -z "$TERMINAL_EMULATOR" && -z "$INTELLIJ_ENVIRONMENT_READER" ]]; then
+        tmux attach || tmux new-session -s main
+    fi
 fi
 
 [ -f ~/.zsh/.zsh-autosuggestions/zsh-autosuggestions.zsh ] && source ~/.zsh/.zsh-autosuggestions/zsh-autosuggestions.zsh

@@ -1,8 +1,12 @@
 theme = "Catppuccin Mocha"
-
 font-family = "JetBrainsMono Nerd Font"
-font-size = 13
+font-size = 15
 
 gtk-titlebar = false
+macos-titlebar-style = transparent
+window-colorspace = "display-p3"
+window-padding-balance = true
 
+cursor-style = "block"
+cursor-style-blink = false
 macos-option-as-alt = true
