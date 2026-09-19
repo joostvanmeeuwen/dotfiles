@@ -55,6 +55,14 @@ if [[ "$OS" != "macos" ]]; then
   link_dotfile ".config/systemd/user/gcr-ssh-agent.service" ".config/systemd/user/gcr-ssh-agent.service"
   link_dotfile ".config/systemd/user/gcr-ssh-agent.socket" ".config/systemd/user/gcr-ssh-agent.socket"
   link_dotfile ".config/environment.d/bitwarden-ssh.conf" ".config/environment.d/bitwarden-ssh.conf"
+  link_dotfile ".local/share/org.gnome.Ptyxis/palettes/catppuccin-mocha-readable.palette" ".local/share/org.gnome.Ptyxis/palettes/catppuccin-mocha-readable.palette"
+
+  if command -v gsettings >/dev/null && gsettings list-schemas | grep -qx org.gnome.Ptyxis; then
+    ptyxis_profile=$(gsettings get org.gnome.Ptyxis default-profile-uuid | tr -d "'")
+    gsettings set "org.gnome.Ptyxis.Profile:/org/gnome/Ptyxis/Profiles/${ptyxis_profile}/" \
+      palette 'catppuccin-mocha-readable'
+    info "Ptyxis palette set to catppuccin-mocha-readable"
+  fi
 fi
 link_dotfile ".config/ghostty/config" ".config/ghostty/config"
 
