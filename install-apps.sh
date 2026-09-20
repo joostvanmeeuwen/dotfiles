@@ -144,6 +144,36 @@ install_zed() {
   curl -f https://zed.dev/install.sh | sh
 }
 
+install_herdr() {
+  # macOS installs herdr via the Brewfile, which also ships zsh completions.
+  if [[ "$OS" != "macos" ]]; then
+    if command_exists herdr; then
+      warn "herdr already installed"
+    else
+      info "Installing herdr..."
+      curl -fsSL https://herdr.dev/install.sh | sh
+    fi
+
+    # The installer drops the binary in ~/.local/bin, which may not be on
+    # PATH yet in this shell.
+    if ! command_exists herdr && [ -x "$HOME/.local/bin/herdr" ]; then
+      PATH="$HOME/.local/bin:$PATH"
+    fi
+
+    if ! command_exists herdr; then
+      error "herdr not found after install, skipping zsh completions"
+      return 0
+    fi
+
+    info "Generating herdr zsh completions..."
+    mkdir -p "$HOME/.zfunc"
+    herdr completion zsh > "$HOME/.zfunc/_herdr"
+  fi
+
+  # compinit caches for 24h, so drop the dump to pick up new completions now.
+  rm -f "$HOME/.zcompdump"
+}
+
 install_brew_bundle() {
   local script_dir
   script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -189,6 +219,7 @@ main() {
   install_gemini_cli
   install_jetbrains_toolbox
   install_zed
+  install_herdr
   info "All applications installed successfully!"
 }
 

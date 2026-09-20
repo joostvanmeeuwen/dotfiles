@@ -65,6 +65,7 @@ if [[ "$OS" != "macos" ]]; then
   fi
 fi
 link_dotfile ".config/ghostty/config" ".config/ghostty/config"
+link_dotfile ".config/herdr/config.toml" ".config/herdr/config.toml"
 
 info "Linking process finished!"
 if [ -d "$BACKUP_DIR" ]; then

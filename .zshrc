@@ -1,5 +1,9 @@
 eval "$(starship init zsh)"
 
+# Completions: locally generated (~/.zfunc) plus Homebrew on Apple Silicon.
+# Non-existent entries are ignored, so this is safe on every machine.
+fpath=(~/.zfunc /opt/homebrew/share/zsh/site-functions $fpath)
+
 autoload -Uz compinit
 if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
   compinit
@@ -57,9 +61,14 @@ if [ -f ~/.aliases ]; then
     . ~/.aliases
 fi
 
-if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-    if [[ -z "$TERMINAL_EMULATOR" && -z "$INTELLIJ_ENVIRONMENT_READER" ]]; then
-        tmux attach || tmux new-session -s main
+if [[ -o interactive ]] && [[ -z "$HERDR_ENV" && -z "$TMUX" ]]; then
+    if [[ -z "$TERMINAL_EMULATOR" && -z "$INTELLIJ_ENVIRONMENT_READER" ]] \
+        && [[ "$TERM_PROGRAM" != "vscode" && "$TERM_PROGRAM" != "zed" ]]; then
+        if command -v herdr &> /dev/null; then
+            herdr
+        elif command -v tmux &> /dev/null; then
+            tmux attach || tmux new-session -s main
+        fi
     fi
 fi
 
@@ -73,8 +82,8 @@ export NVM_DIR="$HOME/.nvm"
 # pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 # pnpm end
 
