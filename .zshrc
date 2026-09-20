@@ -1,3 +1,9 @@
+# PATH must be set before the herdr/tmux autostart below (herdr lives in ~/.local/bin on Linux)
+export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
+
+# opencode
+export PATH="$HOME/.opencode/bin:$PATH"
+
 eval "$(starship init zsh)"
 
 # Completions: locally generated (~/.zfunc) plus Homebrew on Apple Silicon.
@@ -91,10 +97,6 @@ source <(fzf --zsh)
 
 eval "$(zoxide init zsh)"
 
-export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
-
-# opencode
-export PATH="$HOME/.opencode/bin:$PATH"
 
 if [[ "$(uname)" == "Darwin" ]]; then
     BITWARDEN_SSH_SOCK="$HOME/.bitwarden-ssh-agent.sock"
